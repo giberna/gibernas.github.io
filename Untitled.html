@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Mid-Life Crisis, Beta Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Slate, Stone, Amber) -->
+    <!-- Application Structure Plan: A single-page, scrolling narrative that guides the user through the 'presentation'. It starts with a problem statement, presents the 'solution' (the Ironman), provides humorous justifications through interactive elements (cards, charts, CSS diagrams), and culminates in a clear, interactive call-to-action form. This structure turns a passive slideshow into an engaging, persuasive journey, making it harder to say no. -->
+    <!-- Visualization & Content Choices: 
+        - State of Our Union (Line Chart): Report Info -> Graph of declining 'fun' vs. rising 'age'. Goal -> Compare trends humorously. Viz -> Chart.js line chart. Interaction -> Animates on scroll. Justification -> More dramatic and engaging than a static image.
+        - The Distances (Cards): Report Info -> Swim, Bike, Run distances. Goal -> Inform. Viz -> HTML/CSS cards with icons. Interaction -> Hover effects. Justification -> Breaks down the challenge into digestible, visually appealing chunks.
+        - The Rationale (CSS Venn Diagram): Report Info -> Venn Diagram of pain types. Goal -> Compare pain sources. Viz -> HTML/CSS circles. Interaction -> None needed, visual is self-explanatory. Justification -> Recreates the visual gag without using forbidden SVG.
+        - The Ask (Form): Report Info -> 'Are you in?' checkboxes. Goal -> Get commitment. Viz -> HTML form with styled radio buttons. Interaction -> Clicking a 'YES' option triggers a confetti animation. Justification -> Makes saying 'yes' a fun, rewarding event.
+        - Rebuttals (Accordion): Report Info -> Objections & rebuttals. Goal -> Organize FAQs. Viz -> HTML details/summary tags for a native accordion. Interaction -> Click to expand/collapse. Justification -> Cleanly organizes counter-arguments without cluttering the page.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Inter', sans-serif;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
+
+    <!-- Header / Title Slide -->
+    <header class="min-h-screen flex flex-col justify-center items-center text-center p-8 bg-slate-100 fade-in-section">
+        <div class="max-w-3xl">
+            <h2 class="text-xl md:text-2xl text-amber-600 font-bold font-display tracking-wider">PROJECT: PRE MID-LIFE CRISIS</h2>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black my-4 font-display leading-tight">A Strategic Proposal for Ironman 70.3 Valencia</h1>
+            <p class="text-lg md:text-xl text-slate-600 mt-6">A Presentation for Dr. Patrick Bianchi & Alexis Sargenti</p>
+            <p class="text-sm text-slate-500 mt-2">Q2 2026 Initiative</p>
+            <div class="mt-12 text-slate-500 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+
+        <!-- Slide 2: The Alarming State of Our Union -->
+        <section id="slide2" class="fade-in-section max-w-4xl mx-auto text-center my-16">
+            <h2 class="text-3xl md:text-4xl font-bold font-display">The Alarming State of Our Union</h2>
+            <p class="mt-4 text-lg text-slate-700 max-w-2xl mx-auto">
+                Gentlemen, thank you for attending this urgent meeting. I've gathered you here today because our analytics have revealed a disturbing trend. We are on (or over) the precipice of turning 30, and the data is clear: we are getting old and boring.
+            </p>
+            <div class="chart-container my-8">
+                <canvas id="stateOfUnionChart"></canvas>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 text-left mt-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg font-display text-amber-700">Injury Proliferation</h3>
+                    <p class="mt-2 text-slate-600">Our main hobby, running, now causes a new, exotic injury every fiscal quarter.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg font-display text-amber-700">Challenge Devolution</h3>
+                    <p class="mt-2 text-slate-600">Our definition of a "challenge" has devolved from climbing mountains to assembling IKEA furniture without crying.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg font-display text-amber-700">Societal Mandate</h3>
+                    <p class="mt-2 text-slate-600">Society dictates that men entering their fourth decade must engage in an act of physical desperation. It's either this or buy a leather jacket.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: The Ill-Advised, Genius Solution -->
+        <section id="slide3" class="fade-in-section max-w-5xl mx-auto text-center my-24">
+            <h2 class="text-3xl md:text-4xl font-bold font-display">The Ill-Advised, Genius Solution</h2>
+            <p class="mt-4 text-lg text-slate-700 max-w-2xl mx-auto">
+                The solution? Pivoting. You will diversify the pain portfolio. We will go to Valencia and do an Ironman 70.3.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border-t-4 border-blue-500">
+                    <div class="text-5xl mb-4">🏊</div>
+                    <h3 class="text-2xl font-bold font-display">1.9km Swim</h3>
+                    <p class="mt-2 text-slate-600">A refreshing dip in the Mediterranean. It’s like a spa day, but with more kicking and a higher chance of swallowing saltwater.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border-t-4 border-green-500">
+                    <div class="text-5xl mb-4">🚴</div>
+                    <h3 class="text-2xl font-bold font-display">90km Bike Ride</h3>
+                    <p class="mt-2 text-slate-600">A gentle, scenic tour. An opportunity to finally justify buying skin-tight lycra after pretending to mock me for years.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border-t-4 border-red-500">
+                    <div class="text-5xl mb-4">🏃</div>
+                    <h3 class="text-2xl font-bold font-display">21.1km Run</h3>
+                    <p class="mt-2 text-slate-600">A victory lap to the finish line, where mountains of paella and beer await. You are technically already mediocre at this part!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Why This Is a Genuinely Good Idea -->
+        <section id="slide4" class="fade-in-section max-w-4xl mx-auto text-center my-24">
+            <h2 class="text-3xl md:text-4xl font-bold font-display">Why This Is a Genuinely Good Idea</h2>
+            <p class="mt-4 text-lg text-slate-700 max-w-2xl mx-auto">
+                Now, I know what you're thinking. 'This sounds terrible.' And you're right. But it's the *right kind* of terrible.
+            </p>
+            <div class="mt-12 flex justify-center items-center" aria-label="Venn Diagram of Suffering">
+                <div class="relative w-64 h-64 md:w-80 md:h-80">
+                    <div class="absolute top-0 left-0 w-48 h-48 md:w-56 md:h-56 bg-red-400 rounded-full opacity-70 flex items-center justify-center">
+                        <span class="text-white font-bold text-center p-4">Things That Hurt Our Knees (Running)</span>
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-48 h-48 md:w-56 md:h-56 bg-blue-400 rounded-full opacity-70 flex items-center justify-center">
+                         <span class="text-white font-bold text-center p-4">Things That Don't (Swim/Bike)</span>
+                    </div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10 bg-purple-600 text-white p-4 rounded-lg shadow-xl">
+                        <h4 class="font-bold font-display">Triathlon</h4>
+                        <p class="text-sm">The Perfect Balance of Suffering!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 text-left mt-12">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg font-display">Injury Diversification</h3>
+                    <p class="mt-2 text-slate-600">You can't get runner's knee if you're too busy with swimmer's shoulder and road rash! It's smart risk management.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg font-display">Permission to Buy Gadgets</h3>
+                    <p class="mt-2 text-slate-600">Think of the toys! Carbon fiber bikes, aero helmets, watches that cost more than our first cars. You get to become *those guys*.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg font-display">It's in VALENCIA</h3>
+                    <p class="mt-2 text-slate-600">The suffering is temporary, but the post-race tapas are forever. Beer is on me. All of it.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Embrace the Stereotype -->
+        <section id="slide5" class="fade-in-section max-w-4xl mx-auto text-center my-24 bg-slate-800 text-white p-8 md:p-12 rounded-lg shadow-2xl">
+            <h2 class="text-3xl md:text-4xl font-bold font-display">Embrace the Stereotype</h2>
+            <p class="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
+                Look at this. This is our future. We could be these people. People who talk about 'carb-loading' with a straight face. People whose calves are so defined they require their own postal code. We will be insufferable. We will be glorious.
+            </p>
+        </section>
+
+        <!-- Slide 6: The Ask -->
+        <section id="slide6" class="fade-in-section max-w-2xl mx-auto text-center my-24">
+            <h2 class="text-3xl md:text-4xl font-bold font-display">The Ask</h2>
+            <p class="mt-4 text-lg text-slate-700">
+                So, here's the call to action. I am prepared to make a financially questionable decision on behalf of all of us. The only thing I need is your verbal confirmation.
+            </p>
+            <form id="commitment-form" class="mt-8 space-y-4">
+                <h3 class="text-2xl font-bold font-display">Are you in?</h3>
+                <label class="block border-2 border-slate-300 rounded-lg p-4 text-left cursor-pointer hover:bg-green-50 hover:border-green-400 transition-colors">
+                    <input type="radio" name="commitment" value="glory" class="mr-3">
+                    <span class="font-bold">YES:</span> I want to be a Spanish Ironman. My body is ready for glory.
+                </label>
+                <label class="block border-2 border-slate-300 rounded-lg p-4 text-left cursor-pointer hover:bg-green-50 hover:border-green-400 transition-colors">
+                    <input type="radio" name="commitment" value="crisis" class="mr-3">
+                    <span class="font-bold">YES:</span> I am having a premature mid-life crisis and need this.
+                </label>
+                <label class="block border-2 border-slate-300 rounded-lg p-4 text-left cursor-pointer hover:bg-green-50 hover:border-green-400 transition-colors">
+                    <input type="radio" name="commitment" value="peer-pressure" class="mr-3">
+                    <span class="font-bold">YES:</span> I am terrified, but peer pressure is a powerful force.
+                </label>
+            </form>
+            <div id="commitment-message" class="mt-6 text-xl font-bold text-amber-700 h-8"></div>
+        </section>
+
+        <!-- Slide 7: Objections & Rebuttals -->
+        <section id="slide7" class="fade-in-section max-w-2xl mx-auto my-24">
+            <h2 class="text-3xl md:text-4xl font-bold font-display text-center">Objections & Pre-emptive Rebuttals</h2>
+            <div class="mt-8 space-y-4">
+                <details class="bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="font-bold font-display text-lg">"I don't have time."</summary>
+                    <p class="mt-2 text-slate-600 pt-2 border-t">We'll invent time. It's called the 5 AM club. It's awful, but it builds character.</p>
+                </details>
+                <details class="bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="font-bold font-display text-lg">"It's too expensive."</summary>
+                    <p class="mt-2 text-slate-600 pt-2 border-t">It's an investment in our shared legacy of doing cool, dumb things. Also, think of the Instagram content.</p>
+                </details>
+                <details class="bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="font-bold font-display text-lg">"I can't swim that far."</summary>
+                    <p class="mt-2 text-slate-600 pt-2 border-t">Excellent. Neither can I. We'll learn not to drown together. It's a bonding experience!</p>
+                </details>
+            </div>
+            <p class="text-center mt-12 text-2xl font-bold text-amber-700">So... let's go get paella-drunk in Spain next April?</p>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 bg-slate-800 text-slate-400">
+        <p>A legally non-binding but morally essential proposal.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fade-in sections on scroll
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => observer.observe(section));
+
+            // Chart.js: State of Our Union
+            const chartCtx = document.getElementById('stateOfUnionChart').getContext('2d');
+            let stateOfUnionChart;
+            const chartObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    if (stateOfUnionChart) stateOfUnionChart.destroy();
+                    stateOfUnionChart = new Chart(chartCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Age 25', 'Age 26', 'Age 27', 'Age 28', 'Age 29', 'Age 30'],
+                            datasets: [{
+                                label: 'Groaning Noises When Standing Up',
+                                data: [1, 2, 4, 7, 11, 18],
+                                borderColor: 'rgb(239, 68, 68)',
+                                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                                tension: 0.4,
+                                fill: true,
+                            }, {
+                                label: 'Number of \'Wild Nights Out\'',
+                                data: [20, 15, 10, 8, 5, 2],
+                                borderColor: 'rgb(59, 130, 246)',
+                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                tension: 0.4,
+                                fill: true,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            animation: {
+                                duration: 1500,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+                    chartObserver.unobserve(entries[0].target);
+                }
+            }, { threshold: 0.5 });
+            chartObserver.observe(document.getElementById('stateOfUnionChart'));
+
+            // Confetti logic
+            const confettiCanvas = document.getElementById('confetti-canvas');
+            const confettiCtx = confettiCanvas.getContext('2d');
+            let confettiParticles = [];
+
+            function resizeCanvas() {
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            function createConfetti() {
+                const count = 200;
+                const colors = ['#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#a855f7'];
+                for (let i = 0; i < count; i++) {
+                    confettiParticles.push({
+                        x: Math.random() * confettiCanvas.width,
+                        y: -20,
+                        w: Math.random() * 10 + 5,
+                        h: Math.random() * 10 + 5,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: Math.random() * 5 + 2,
+                        angle: Math.random() * Math.PI * 2,
+                        spin: (Math.random() - 0.5) * 0.2
+                    });
+                }
+            }
+
+            function drawConfetti() {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                confettiParticles.forEach((p, i) => {
+                    p.vy += 0.05;
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    p.angle += p.spin;
+                    
+                    confettiCtx.save();
+                    confettiCtx.translate(p.x, p.y);
+                    confettiCtx.rotate(p.angle);
+                    confettiCtx.fillStyle = p.color;
+                    confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    confettiCtx.restore();
+
+                    if (p.y > confettiCanvas.height + 20) {
+                        confettiParticles.splice(i, 1);
+                    }
+                });
+            }
+
+            let animationFrameId;
+            function confettiLoop() {
+                drawConfetti();
+                if (confettiParticles.length > 0) {
+                    animationFrameId = requestAnimationFrame(confettiLoop);
+                } else {
+                    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                }
+            }
+
+            // Commitment form logic
+            const commitmentForm = document.getElementById('commitment-form');
+            const commitmentMessage = document.getElementById('commitment-message');
+            commitmentForm.addEventListener('change', () => {
+                if (confettiParticles.length === 0) {
+                    createConfetti();
+                    cancelAnimationFrame(animationFrameId);
+                    confettiLoop();
+                }
+                commitmentMessage.textContent = "IT'S OFFICIAL. TRAINING STARTS MONDAY.";
+            });
+        });
+    </script>
+</body>
+</html>
+
